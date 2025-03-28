@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from sqlalchemy import create_engine, Column, Integer, String, Boolean
 from sqlalchemy.orm import sessionmaker, declarative_base
@@ -40,6 +40,13 @@ def get_tasks():
     } for task in tasks]
     return jsonify(tasks_list)
 
+@app.route("/tasks", methods=["POST"])
+def create_task():
+    data = request.get_json()
+    new_task = Task(data['description'], data['status'])
+    session.add(new_task)
+    session.commit()
+    return jsonify({'message': 'Task created successfully'}), 201
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)

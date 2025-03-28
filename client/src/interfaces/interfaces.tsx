@@ -14,3 +14,7 @@ export interface Users {
 export interface ItemProps {
   task: Task;
 }
+
+export interface ApiResponse {
+  message: string;
+}
