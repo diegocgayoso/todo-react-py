@@ -48,5 +48,38 @@ def create_task():
     session.commit()
     return jsonify({'message': 'Task created successfully'}), 201
 
+@app.route("/tasks/<int:task_id>", methods=["PUT"])
+def complete_task(task_id):
+    task = session.query(Task).get(task_id)
+    if task:
+        task.status = True
+        session.commit()
+        return jsonify({'message': 'Task completed successfully'}), 201
+    else:
+        return jsonify({'message': 'Task not found'}), 404
+    
+@app.route("/tasks/<int:task_id>", methods=["PUT"])   
+def edit_task(task_id):
+    data = request.get_json()
+    task = session.query(Task).get(task_id)
+    if task:
+        task.description = data['description']
+        session.commit()
+        return jsonify({'message': 'Task edited successfully'}), 201
+    else:
+        return jsonify({'message': 'Task not found'}), 404
+
+
+@app.route("/tasks/<int:task_id>", methods=["DELETE"])
+def delete_task(task_id):
+    task = session.query(Task).get(task_id)
+    if task:
+        session.delete(task)
+        session.commit()
+        return jsonify({'message': 'Task deleted successfully'}), 201
+    else:
+        return jsonify({'message': 'Task not found'}), 404
+    
+
 if __name__ == "__main__":
     app.run(debug=True, port=8080)
