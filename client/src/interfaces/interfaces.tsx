@@ -3,6 +3,7 @@ export interface Tasks {
 }
 
 export interface Task {
+  id?: number;
   description: string;
   status: boolean;
 }
@@ -13,6 +14,7 @@ export interface Users {
 
 export interface ItemProps {
   task: Task;
+  onEdit: (task: Task) => void;
 }
 
 export interface ApiResponse {

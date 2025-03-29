@@ -19,11 +19,16 @@ function App() {
 
   const handleSubmit = async (ev: React.FormEvent) => {
     ev.preventDefault();
-    console.log("adding");
+    // console.log("adding");
+    const url = task.id
+      ? `http://localhost:8080/tasks/${task.id}`
+      : "http://localhost:8080/tasks";
+
+    const method = task.id ? "PUT" : "POST";
 
     try {
-      const response = await fetch("http://localhost:8080/tasks", {
-        method: "POST",
+      const response = await fetch(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
         },
@@ -33,9 +38,18 @@ function App() {
 
       const result: ApiResponse = await response.json();
       alert(result.message);
+      await fetchDataTasks();
+      setTask({
+        description: "",
+        status: false,
+      });
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
+  };
+
+  const handleEdit = (taskToEdit: Task) => {
+    setTask(taskToEdit);
   };
 
   useEffect(() => {
@@ -50,7 +64,7 @@ function App() {
           To do <br /> <span className="font-bold">List</span>
         </h1>
       </header>
-      {/* <Form onSubmit={handleSubmit} /> */}
+      {/* Formulário */}
       <form onSubmit={handleSubmit} className="flex gap-4">
         <input
           type="text"
@@ -63,12 +77,12 @@ function App() {
           type="submit"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
-          Add Task
+          {task.id ? "Update task" : "Add taks"}
         </button>
       </form>
-      <div className="w-96 h-96 rounded-lg p-4 overflow-auto">
+      <div className="sm:w-1/2 h-96 rounded-lg p-4 overflow-auto">
         {tasks.map((task, index) => (
-          <Item key={index} task={task} />
+          <Item key={index} task={task} onEdit={handleEdit} />
         ))}
       </div>
     </div>
