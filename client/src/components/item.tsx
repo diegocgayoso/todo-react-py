@@ -1,45 +1,18 @@
-import { ApiResponse, ItemProps } from "../interfaces/interfaces";
+import { ItemProps } from "../interfaces/interfaces";
 
-export const Item = ({ task, onEdit }: ItemProps) => {
-  const checkTask = async () => {
-    console.log("editando", task.id);
-    try {
-      const response = await fetch(`http://localhost:8080/tasks/${task.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...task,
-          status: !task.status,
-        }),
-      });
-      if (!response.ok) throw new Error("Erro na edição");
-      const result: ApiResponse = await response.json();
-      alert(result.message);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-  const deleteTask = async () => {
-    console.log("deletando", task.id);
-    try {
-      const response = await fetch(`http://localhost:8080/tasks/${task.id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) throw new Error("Erro na exclusão");
-      const result: ApiResponse = await response.json();
-      alert(result.message);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+export const Item = ({ task, onEdit, onDelete, onChecked }: ItemProps) => {
+
   const editTask = () => {
     onEdit(task);
   };
+
+  const deleteTask =() => {
+    onDelete(task);
+  }
+
+  const checkTask = () => {
+    onChecked(task);
+  }
 
   return (
     <div
@@ -53,7 +26,7 @@ export const Item = ({ task, onEdit }: ItemProps) => {
           checked={task.status}
           onChange={checkTask}
           className="w-4 h-4"
-          disabled={task.status === true}
+          // disabled={task.status === true}
         />
 
         <p className="flex-1 cursor-pointer">{task.description}</p>

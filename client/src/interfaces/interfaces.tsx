@@ -15,6 +15,8 @@ export interface Users {
 export interface ItemProps {
   task: Task;
   onEdit: (task: Task) => void;
+  onDelete: (task: Task) => void;
+  onChecked: (task: Task) => void;
 }
 
 export interface ApiResponse {
